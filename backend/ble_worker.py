@@ -324,9 +324,11 @@ def _extract_mac_from_manufacturer(advertisement_data) -> Optional[str]:
     payload: bytes = mdata[0x0001]
     if len(payload) < 6:
         return None
-    mac_bytes = payload[0:6]
+    print(payload)
+    mac_bytes = payload[3:9] # 3:9 gave the correct thing in reverse
+    print(mac_bytes)
     # Format as XX:XX:XX:XX:XX:XX (same ordering as JS which later reverses again)
-    return ':'.join(f"{b:02X}" for b in mac_bytes)
+    return ':'.join(f"{b:02X}" for b in mac_bytes[::-1])
 
 async def _discover_cube(timeout: int = SCAN_TIMEOUT):
     """Scan for BLE devices and return (device, real_mac) for the first GAN cube found."""
